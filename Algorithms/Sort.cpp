@@ -1,23 +1,35 @@
 #include "Sort.h"
 
-// Sắp xếp danh sách lớp học phần theo tên tăng dần (A -> Z) bằng thuật toán Selection Sort
 void selectionSortSectionsByName(CourseSectionList &list) {
     if (list.head == nullptr || list.head->next == nullptr) {
         return;
     }
 
     for (SectionNode* i = list.head; i->next != nullptr; i = i->next) {
-        SectionNode* minNode = i; // Tạm coi node i đang có tên lớp đứng đầu bảng chữ cái
+        SectionNode* minNode = i;
 
         for (SectionNode* j = i->next; j != nullptr; j = j->next) {
             if (j->data.sectionName < minNode->data.sectionName) {
-                minNode = j; // Ghi nhận lại node có tên nhỏ hơn
+                minNode = j;
             }
         }
+
         if (minNode != i) {
-            CourseSection temp = i->data;
+            CourseSection tempData = i->data;
             i->data = minNode->data;
-            minNode->data = temp;
+            minNode->data = tempData;
+
+            RegistrationList tempReg = i->registrations;
+            i->registrations = minNode->registrations;
+            minNode->registrations = tempReg;
+
+            Queue tempSenior = i->seniorQueue;
+            i->seniorQueue = minNode->seniorQueue;
+            minNode->seniorQueue = tempSenior;
+
+            Queue tempNormal = i->normalQueue;
+            i->normalQueue = minNode->normalQueue;
+            minNode->normalQueue = tempNormal;
         }
     }
 }
