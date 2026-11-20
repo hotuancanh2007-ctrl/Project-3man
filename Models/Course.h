@@ -16,10 +16,4 @@ struct CourseNode {
     CourseNode* next;
 };
 
-struct CourseList {
-    CourseNode* head;
-    CourseNode* tail;
-    int size;
-};
-
 #endif
