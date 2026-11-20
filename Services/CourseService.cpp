@@ -21,54 +21,6 @@ int stringToInt(string s) {
     return result;
 }
 
-void initCourseList(CourseList &cList) {
-    cList.head = nullptr;
-    cList.tail = nullptr;
-    cList.size = 0;
-}
-
-CourseNode* findCourseById(CourseList cList, string courseId) {
-    CourseNode* curr = cList.head;
-    while (curr != nullptr) {
-        if (curr->data.courseId == courseId) return curr;
-        curr = curr->next;
-    }
-    return nullptr;
-}
-
-bool addCourse(CourseList &cList, Course data) {
-    if (data.courseId == "" || data.courseName == "" || data.credits <= 0) return false;
-    if (findCourseById(cList, data.courseId) != nullptr) return false;
-
-    if (data.prerequisiteId == "") {
-        data.prerequisiteId = "NONE";
-    }
-
-    CourseNode* newNode = new CourseNode;
-    newNode->data = data;
-    newNode->next = nullptr;
-
-    if (cList.head == nullptr) {
-        cList.head = cList.tail = newNode;
-    } else {
-        cList.tail->next = newNode;
-        cList.tail = newNode;
-    }
-    cList.size++;
-    return true;
-}
-
-bool updateCourse(CourseList &cList, Course newData) {
-    if (newData.courseName == "" || newData.credits <= 0) return false;
-
-    CourseNode* node = findCourseById(cList, newData.courseId);
-    if (node == nullptr) return false;
-
-    if (newData.prerequisiteId == "") newData.prerequisiteId = "NONE";
-    node->data = newData;
-    return true;
-}
-
 bool removeCourse(CourseList &cList, CourseSectionList sList, string courseId) {
     if (cList.head == nullptr) return false;
 
@@ -80,37 +32,7 @@ bool removeCourse(CourseList &cList, CourseSectionList sList, string courseId) {
         secCurr = secCurr->next;
     }
 
-    CourseNode* curr = cList.head;
-    CourseNode* prev = nullptr;
-    while (curr != nullptr && curr->data.courseId != courseId) {
-        prev = curr;
-        curr = curr->next;
-    }
-
-    if (curr == nullptr) return false;
-
-    if (curr == cList.head) {
-        cList.head = cList.head->next;
-        if (cList.head == nullptr) cList.tail = nullptr;
-    } else {
-        prev->next = curr->next;
-        if (curr == cList.tail) cList.tail = prev;
-    }
-
-    delete curr;
-    cList.size--;
-    return true;
-}
-
-void clearCourseList(CourseList &cList) {
-    CourseNode* curr = cList.head;
-    while (curr != nullptr) {
-        CourseNode* temp = curr;
-        curr = curr->next;
-        delete temp;
-    }
-    cList.head = cList.tail = nullptr;
-    cList.size = 0;
+    return deleteCourseById(cList, courseId);
 }
 
 bool addSectionWithCheck(CourseList cList, CourseSectionList &sList, CourseSection data) {
