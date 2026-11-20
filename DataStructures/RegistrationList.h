@@ -1,7 +1,7 @@
+#pragma once
 #include "../Models/Registration.h"
 #include <iostream>
 #include <iomanip>
-#include <ctime>
 
 void initRegistrationList(RegistrationList &l);
 bool isEmpty(RegistrationList &l);
